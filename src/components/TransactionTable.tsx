@@ -3,6 +3,7 @@ import dummyData from "../dummyData";
 import { Link } from "react-router-dom";
 import { TransactionDataType } from "../../types/type";
 import { useDataContextValues } from "./context/DataContext";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 
 const TransactionTable = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
@@ -158,10 +159,52 @@ const TransactionTable = () => {
                   USD
                 </td>
                 <td className="px-6 py-3 text-left text-xs font-medium text-gray-500  tracking-wider">
-                  {transaction.status}{" "}
+                  {transaction.status}
                 </td>
                 <td className="px-6 py-3 text-left text-xs font-medium text-gray-500  tracking-wider">
-                  Action
+                  <DropdownMenu.Root>
+                    <DropdownMenu.Trigger asChild>
+                      <button>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth="1.5"
+                          stroke="currentColor"
+                          className="w-6 h-6 bg-gray-200 rounded-full p-1"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"
+                          />
+                        </svg>
+                      </button>
+                    </DropdownMenu.Trigger>
+                    <DropdownMenu.Portal>
+                      <DropdownMenu.Content
+                        className="min-w-[120px] bg-white cursor-pointer  border border-gray-300"
+                        sideOffset={5}
+                      >
+                        <DropdownMenu.Item className=" text-[13px] text-center leading-none text-gray-800 rounded-[3px] flex items-center justify-center h-[25px] px-[5px]  outline-none data-[highlighted]:bg-violet-100 data-[highlighted]:text-violet-800">
+                          Edit
+                        </DropdownMenu.Item>
+                        <DropdownMenu.Item className=" text-[13px] leading-none text-gray-800 rounded-[3px] flex items-center justify-center h-[25px] px-[5px] outline-none data-[highlighted]:bg-violet-100 data-[highlighted]:text-violet-800">
+                          Delete
+                        </DropdownMenu.Item>
+                        <DropdownMenu.Item className=" text-[13px] leading-none text-gray-800 rounded-[3px] flex items-center justify-center h-[25px] px-[5px]   outline-none data-[highlighted]:bg-violet-100 data-[highlighted]:text-violet-800">
+                          Archive
+                        </DropdownMenu.Item>
+                      </DropdownMenu.Content>
+                    </DropdownMenu.Portal>
+                  </DropdownMenu.Root>
+
+                  {/* <select>
+                    <option></option>
+                    <option value="approve">Approve</option>
+                    <option value="reject">Reject</option>
+                    <option value="pending">Pending</option>
+                  </select> */}
                 </td>
               </tr>
             );
