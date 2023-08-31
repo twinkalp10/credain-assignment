@@ -7,7 +7,7 @@ import { useDataContextValues } from "./context/DataContext";
 const TransactionTable = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [sortedColumn, setSortedColumn] = useState<string>("");
-  const { sortedData, setSortedData } = useDataContextValues();
+  const { sortedData, setSortedData, editedUser } = useDataContextValues();
   const sortColumn = (col: string) => {
     if (col === sortedColumn) {
       setSortOrder(sortOrder === "asc" ? ("asc" ? "desc" : "asc") : "asc");
@@ -52,8 +52,6 @@ const TransactionTable = () => {
       />
     </svg>
   );
-
-  console.log("sortedData from table", sortedData);
 
   return (
     <div className="mt-8">
@@ -142,19 +140,25 @@ const TransactionTable = () => {
                   {transaction.invoiceNumber}
                 </td>
                 <td className="px-6 py-3 text-left text-xs font-medium text-gray-500  tracking-wider">
-                  {transaction.payer}
+                  {transaction.invoiceNumber === editedUser?.invoiceNumber
+                    ? editedUser?.payer
+                    : transaction.payer}
                 </td>
                 <td className="px-6 py-3 text-left text-xs font-medium text-gray-500  tracking-wider">
-                  {transaction.payee}
+                  {transaction.invoiceNumber === editedUser?.invoiceNumber
+                    ? editedUser?.payee
+                    : transaction.payee}
                 </td>
                 <td className="px-6 py-3 text-left text-xs font-medium text-gray-500  tracking-wider">
-                  {transaction.amount}
+                  {transaction.invoiceNumber === editedUser?.invoiceNumber
+                    ? editedUser?.amount
+                    : transaction.amount}
                 </td>
                 <td className="px-6 py-3 text-left text-xs font-medium text-gray-500  tracking-wider">
                   USD
                 </td>
                 <td className="px-6 py-3 text-left text-xs font-medium text-gray-500  tracking-wider">
-                  {transaction.status}
+                  {transaction.status}{" "}
                 </td>
                 <td className="px-6 py-3 text-left text-xs font-medium text-gray-500  tracking-wider">
                   Action

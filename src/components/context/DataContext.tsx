@@ -4,6 +4,10 @@ import { TransactionDataType } from "../../../types/type";
 type DataContextType = {
   sortedData: TransactionDataType[];
   setSortedData: React.Dispatch<React.SetStateAction<TransactionDataType[]>>;
+  editedUser: TransactionDataType | undefined;
+  setEditedUser: React.Dispatch<
+    React.SetStateAction<TransactionDataType | undefined>
+  >;
 };
 
 type DataContextProviderType = {
@@ -26,12 +30,19 @@ export const useDataContextValues = () => {
 
 export const DataContextProvider = ({ children }: DataContextProviderType) => {
   const [sortedData, setSortedData] = React.useState<TransactionDataType[]>([]);
-  const [editedTransaction, setEditedTransaction] = useState<
+  const [editedUser, setEditedUser] = useState<
     TransactionDataType | undefined
   >();
 
   return (
-    <DataContext.Provider value={{ sortedData, setSortedData }}>
+    <DataContext.Provider
+      value={{
+        sortedData,
+        setSortedData,
+        editedUser,
+        setEditedUser,
+      }}
+    >
       {children}
     </DataContext.Provider>
   );

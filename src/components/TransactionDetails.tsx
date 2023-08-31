@@ -4,7 +4,8 @@ import { useDataContextValues } from "./context/DataContext";
 
 const TransactionDetails = () => {
   const { transactionId } = useParams();
-  const { sortedData, setSortedData } = useDataContextValues();
+  const { sortedData, setSortedData, editedUser, setEditedUser } =
+    useDataContextValues();
   const transaction = sortedData.find(
     (data) => data.invoiceNumber === transactionId
   );
@@ -26,6 +27,12 @@ const TransactionDetails = () => {
         [event.target.name]: event.target.value,
       };
     });
+    setEditedUser((prevData) => {
+      return {
+        ...prevData,
+        [event.target.name]: event.target.value,
+      };
+    });
   };
 
   const handleSave = () => {
@@ -36,11 +43,13 @@ const TransactionDetails = () => {
           : data
       );
       setSortedData([...updatedData]);
-      console.log(sortedData);
+      if (editedTransaction.invoiceNumber === transactionId) {
+        setEditedUser(editedTransaction);
+      }
     }
+    console.log(editedTransaction?.invoiceNumber === transactionId);
+    console.log(editedUser?.invoiceNumber);
   };
-
-  console.log(editedTransaction);
 
   return (
     <div className="mx-auto max-w-3xl flex flex-col gap-8">
@@ -60,12 +69,12 @@ const TransactionDetails = () => {
         <label htmlFor="payer">Payer: </label>
         <p>
           Payer is:
-          {editedTransaction?.payer}
+          {editedUser?.payer ?? editedTransaction?.payer}
         </p>
         <input
           type="text"
           name="payer"
-          value={editedTransaction?.payer}
+          value={editedUser?.payer ?? editedTransaction?.payer}
           className="border border-gray-200 w-56"
           onChange={handleInputChange}
         />
@@ -74,12 +83,12 @@ const TransactionDetails = () => {
         <label htmlFor="payee">Payee: </label>
         <p>
           Payee is:
-          {editedTransaction?.payee}
+          {editedUser?.payee ?? editedTransaction?.payee}
         </p>
         <input
           type="text"
           name="payee"
-          value={editedTransaction?.payee}
+          value={editedUser?.payee ?? editedTransaction?.payee}
           className="border border-gray-200 w-56"
           onChange={handleInputChange}
         />
@@ -88,12 +97,12 @@ const TransactionDetails = () => {
         <label htmlFor="amount">Amount: </label>
         <p>
           Amount is:
-          {editedTransaction?.amount}
+          {editedUser?.amount ?? editedTransaction?.amount}
         </p>
         <input
           type="text"
           name="amount"
-          value={editedTransaction?.amount}
+          value={editedUser?.amount ?? editedTransaction?.amount}
           className="border border-gray-200 w-56"
           onChange={handleInputChange}
         />
@@ -102,15 +111,8 @@ const TransactionDetails = () => {
         <label htmlFor="status">Status: </label>
         <p>
           Status is:
-          {editedTransaction?.status}
+          {editedUser?.status ?? editedTransaction?.status}
         </p>
-        <input
-          type="text"
-          name="status"
-          value={editedTransaction?.status}
-          className="border border-gray-200 w-56"
-          onChange={handleInputChange}
-        />
       </div>
       <div>
         <button onClick={handleSave}>save</button>
