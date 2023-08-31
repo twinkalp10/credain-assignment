@@ -148,7 +148,7 @@ const TransactionTable = () => {
           {sortedData.map((transaction, index) => {
             return (
               <tr key={index}>
-                <td className="px-6 py-3 text-left text-xs font-medium text-gray-500  tracking-wider hover:font-bold">
+                <td className="px-6 py-3 text-left text-xs font-medium text-gray-500  tracking-wider hover:font-bold hover:text-sm hover:text-violet-800">
                   <Link to={`/transaction/${transaction.invoiceNumber}`}>
                     {transaction.transactionDate?.toLocaleDateString()}{" "}
                   </Link>

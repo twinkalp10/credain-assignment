@@ -28,12 +28,12 @@ npm run start
   - `CardThirdState.tsx` to show the total number of the transactions with third state
   - `CardTotalAmount.tsx` to show the total amount of the transactions
 - `api` folder to define api fetchers
-- `TransactionDetails.tsx` shows the transaction details after clicking on the transaction invoice number
+- `TransactionDetails.tsx` shows the transaction details after clicking on the transaction Date
 - `TransactionTable.tsx` shows the table of transactions
 
 ## Key test cases
 
-- Clicking on invoice number opens new page with transaction details
+- Clicking on `transaction Date` opens new page with transaction details
 - Clicking on action icon opens dropdown menu
 - Click save button to save the edited information on transaction details page
 
