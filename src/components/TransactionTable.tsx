@@ -4,33 +4,48 @@ import { Link } from "react-router-dom";
 import { TransactionDataType } from "../../types/type";
 import { useDataContextValues } from "./context/DataContext";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { fetchExchangeRates } from "./api/rateApi";
 
 const TransactionTable = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [sortedColumn, setSortedColumn] = useState<string>("");
   const { sortedData, setSortedData, editedUser } = useDataContextValues();
+  const [usdToInrRate, setUsdToInrRate] = useState<number>(0);
   const sortColumn = (col: string) => {
     if (col === sortedColumn) {
-      setSortOrder(sortOrder === "asc" ? ("asc" ? "desc" : "asc") : "asc");
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
     } else {
       setSortedColumn(col);
-      setSortOrder(sortOrder === "asc" ? ("asc" ? "desc" : "asc") : "asc");
+      setSortOrder("asc");
     }
   };
+
+  // useEffect(() => {
+  //   const getExchangeRate = async () => {
+  //     const rate = await fetchExchangeRates();
+  //     setUsdToInrRate(rate);
+  //   };
+  //   getExchangeRate();
+  // }, []);
 
   useEffect(() => {
     const sortedDummyData: TransactionDataType[] = [...dummyData].sort(
       (a, b) => {
+        const aValue = a[sortedColumn as keyof typeof a];
+        const bValue = b[sortedColumn as keyof typeof b];
+
         if (sortOrder === "asc") {
-          return a[sortedColumn as keyof typeof a] >
-            b[sortedColumn as keyof typeof b]
-            ? 1
-            : -1;
+          if (sortedColumn === "amount") {
+            return +aValue - +bValue; // Compare as numbers
+          } else {
+            return aValue > bValue ? 1 : -1;
+          }
         } else {
-          return a[sortedColumn as keyof typeof a] <
-            b[sortedColumn as keyof typeof b]
-            ? 1
-            : -1;
+          if (sortedColumn === "amount") {
+            return +bValue - +aValue; // Compare as numbers
+          } else {
+            return aValue < bValue ? 1 : -1;
+          }
         }
       }
     );
@@ -53,6 +68,8 @@ const TransactionTable = () => {
       />
     </svg>
   );
+
+  const statusBar = <div className="w-6 h-1 bg-black rounded"></div>;
 
   return (
     <div className="mt-8">
@@ -97,7 +114,7 @@ const TransactionTable = () => {
             </th>
             <th
               className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider cursor-pointer"
-              onClick={() => sortColumn("invoiceNumber")}
+              onClick={() => sortColumn("amount")}
             >
               <p className="flex justify-center gap-2 items-center">
                 Amount
@@ -106,7 +123,7 @@ const TransactionTable = () => {
             </th>
             <th
               className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider cursor-pointer"
-              onClick={() => sortColumn("amount")}
+              onClick={() => sortColumn("usd")}
             >
               <p className="flex justify-center gap-2 items-center">
                 USD Equivalent
@@ -159,7 +176,22 @@ const TransactionTable = () => {
                   USD
                 </td>
                 <td className="px-6 py-3 text-left text-xs font-medium text-gray-500  tracking-wider">
-                  {transaction.status}
+                  {transaction.status === "First" ? (
+                    <div>{statusBar}</div>
+                  ) : transaction.status === "Second" ? (
+                    <div className="flex gap-2">
+                      {statusBar}
+                      {statusBar}
+                    </div>
+                  ) : (
+                    transaction.status === "Third" && (
+                      <div className="flex gap-2">
+                        {statusBar}
+                        {statusBar}
+                        {statusBar}
+                      </div>
+                    )
+                  )}
                 </td>
                 <td className="px-6 py-3 text-left text-xs font-medium text-gray-500  tracking-wider">
                   <DropdownMenu.Root>

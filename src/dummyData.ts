@@ -6,7 +6,7 @@ const generateDummyTranslation = () => {
     invoiceNumber: faker.string.alphanumeric(5),
     payer: faker.person.firstName() + ' ' + faker.person.lastName(),
     payee: faker.person.firstName() + ' ' + faker.person.lastName(),
-    amount: faker.number.int({ min: 100, max: 10000000 }),
+    amount: faker.number.int({ min: 100, max: 1000 }),
     status: faker.helpers.arrayElement(['First', 'Second', 'Third'])
   }
 }
