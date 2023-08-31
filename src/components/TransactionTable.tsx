@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import dummyData from "../dummyData";
+import { Link } from "react-router-dom";
+import { TransactionDataType } from "../../types/type";
+import { useDataContextValues } from "./context/DataContext";
 
 const TransactionTable = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [sortedColumn, setSortedColumn] = useState<string>("");
-
+  const { sortedData, setSortedData } = useDataContextValues();
   const sortColumn = (col: string) => {
     if (col === sortedColumn) {
       setSortOrder(sortOrder === "asc" ? ("asc" ? "desc" : "asc") : "asc");
@@ -14,19 +17,24 @@ const TransactionTable = () => {
     }
   };
 
-  const sortedData = [...dummyData].sort((a, b) => {
-    if (sortOrder === "asc") {
-      return a[sortedColumn as keyof typeof a] >
-        b[sortedColumn as keyof typeof b]
-        ? 1
-        : -1;
-    } else {
-      return a[sortedColumn as keyof typeof a] <
-        b[sortedColumn as keyof typeof b]
-        ? 1
-        : -1;
-    }
-  });
+  useEffect(() => {
+    const sortedDummyData: TransactionDataType[] = [...dummyData].sort(
+      (a, b) => {
+        if (sortOrder === "asc") {
+          return a[sortedColumn as keyof typeof a] >
+            b[sortedColumn as keyof typeof b]
+            ? 1
+            : -1;
+        } else {
+          return a[sortedColumn as keyof typeof a] <
+            b[sortedColumn as keyof typeof b]
+            ? 1
+            : -1;
+        }
+      }
+    );
+    setSortedData(sortedDummyData);
+  }, [sortOrder, sortedColumn]);
 
   const svg = (
     <svg
@@ -45,9 +53,11 @@ const TransactionTable = () => {
     </svg>
   );
 
+  console.log("sortedData from table", sortedData);
+
   return (
     <div className="mt-8">
-      <table className="w-full border rounded-md border-gray-200">
+      <table className="border rounded-md border-gray-200">
         <thead className="bg-gray-100">
           <tr>
             <th
@@ -122,9 +132,12 @@ const TransactionTable = () => {
           {sortedData.map((transaction, index) => {
             return (
               <tr key={index}>
-                <td className="px-6 py-3 text-left text-xs font-medium text-gray-500  tracking-wider">
-                  {transaction.transactionDate.toLocaleDateString()}{" "}
+                <td className="px-6 py-3 text-left text-xs font-medium text-gray-500  tracking-wider hover:font-bold">
+                  <Link to={`/transaction/${transaction.invoiceNumber}`}>
+                    {transaction.transactionDate?.toLocaleDateString()}{" "}
+                  </Link>
                 </td>
+
                 <td className="px-6 py-3 text-left text-xs font-medium text-gray-500  tracking-wider">
                   {transaction.invoiceNumber}
                 </td>

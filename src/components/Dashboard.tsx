@@ -6,9 +6,9 @@ import TransactionTable from "./TransactionTable";
 
 const Dashboard = () => {
   return (
-    <div className="p-8 max-w-5xl mx-auto">
-      <h1 className="text-2xl font-semibold mb-4 ">Transaction Dashboard</h1>
-      <div className="grid grid-cols-3 gap-8">
+    <div className="max-w-5xl mx-auto p-3 mt-9">
+      <h1 className="text-2xl font-semibold mb-4">Transaction Dashboard</h1>
+      <div className="flex justify-between items-center">
         <CardNumTransactions />
         <CardTotalAmount />
         <CardThirdState />
